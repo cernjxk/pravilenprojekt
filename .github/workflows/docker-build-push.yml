@@ -37,3 +37,16 @@ jobs:
             cernjak/pravilenprojekt:${{ steps.vars.outputs.sha_short }}
           cache-from: type=registry,ref=cernjak/pravilenprojekt:latest
           cache-to: type=inline
+
+
+ - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: ${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+    
+    - name: Verify deployment
+      run: |
+        echo "Application deployed successfully!"
+        echo "URL: https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
