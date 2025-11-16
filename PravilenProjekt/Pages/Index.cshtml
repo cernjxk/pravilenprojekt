@@ -47,6 +47,14 @@
                                 <button class="btn btn-sm btn-outline-primary">
                                     Več info
                                 </button>
+                                <div class="d-flex gap-2 mt-auto">
+                                    <span class="h4 mb-0 text-primary flex-grow-1">
+                                        €@game.Price.ToString("F2")
+                                    </span>
+                                    <a asp-page="./Edit" asp-route-id="@game.Id" class="btn btn-sm btn-warning">
+                                        ✏️ Uredi
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
