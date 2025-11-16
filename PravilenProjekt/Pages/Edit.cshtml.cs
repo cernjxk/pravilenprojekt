@@ -51,7 +51,7 @@ namespace PravilenProjekt.Pages
                     Platform = "Nintendo Switch",
                     Price = 59.99m,
                     ReleaseYear = 2017,
-                    ImageUrl = "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400&h=500&fit=crop",
+                    ImageUrl = "https://m.media-amazon.com/images/I/81Ge3v6ro8L._AC_UF1000,1000_QL80_.jpg",
                     Rating = 9.5
                 },
                 new Game
@@ -62,7 +62,7 @@ namespace PravilenProjekt.Pages
                     Platform = "Multi-platform",
                     Price = 59.99m,
                     ReleaseYear = 2022,
-                    ImageUrl = "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=500&fit=crop",
+                    ImageUrl = "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/capsule_616x353.jpg?t=1748630546",
                     Rating = 9.3
                 },
                 new Game
@@ -73,7 +73,7 @@ namespace PravilenProjekt.Pages
                     Platform = "Multi-platform",
                     Price = 26.95m,
                     ReleaseYear = 2011,
-                    ImageUrl = "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=400&h=500&fit=crop",
+                    ImageUrl = "https://upload.wikimedia.org/wikipedia/en/thumb/b/b6/Minecraft_2024_cover_art.png/250px-Minecraft_2024_cover_art.png",
                     Rating = 8.9
                 }
             };
