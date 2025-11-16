@@ -1,0 +1,57 @@
+﻿@page
+@model PravilenProjekt.Pages.DeleteModel
+@{
+	ViewData["Title"] = "Izbriši igro";
+}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">🗑️ Izbriši igro</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>⚠️ Pozor!</strong> Ali ste prepričani, da želite izbrisati to igro?
+                        <br>To dejanje je <strong>nepovratno</strong>!
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="@Model.Game.ImageUrl" class="img-fluid rounded-start" alt="@Model.Game.Title" style="height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">@Model.Game.Title</h5>
+                                    <p class="card-text">
+                                        <span class="badge bg-secondary">@Model.Game.Genre</span>
+                                        <span class="badge bg-info">@Model.Game.Platform</span>
+                                        <span class="badge bg-warning text-dark">⭐ @Model.Game.Rating</span>
+                                    </p>
+                                    <p class="card-text">
+                                        <small class="text-muted">Leto: @Model.Game.ReleaseYear</small>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong class="text-primary">€@Model.Game.Price.ToString("F2")</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-page="./Index" class="btn btn-secondary">
+                                ❌ Prekliči
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                🗑️ Da, izbriši igro
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
