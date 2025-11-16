@@ -71,6 +71,58 @@
     </div>
 </div>
 
+<hr />
+<div class="container my-5">
+    <h2>🕹️ Moj osebni seznam iger</h2>
+
+    <!-- Temni / svetli način -->
+    <button id="themeToggle" class="btn btn-outline-secondary mb-3">
+        Preklopi temo (dark / light)
+    </button>
+
+    <!-- Forma za dodajanje igre -->
+    <form id="gameForm" class="mb-4">
+        <div class="mb-2">
+            <label class="form-label">Naslov</label>
+            <input type="text" id="gameTitle" class="form-control" required>
+        </div>
+
+        <div class="mb-2">
+            <label class="form-label">Žanr</label>
+            <input type="text" id="gameGenre" class="form-control">
+        </div>
+
+        <div class="mb-2">
+            <label class="form-label">Ocena (1–10)</label>
+            <input type="number" id="gameRating" class="form-control" min="1" max="10">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Dodaj igro</button>
+    </form>
+
+    <!-- Razvrščanje -->
+    <label class="form-label">Razvrsti po:</label>
+    <select id="sortSelect" class="form-select w-auto mb-3">
+        <option value="none">Brez razvrščanja</option>
+        <option value="title">Naslov</option>
+        <option value="rating">Ocena</option>
+    </select>
+
+    <!-- Tabela iger -->
+    <table id="gamesTable" class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Naslov</th>
+                <th>Žanr</th>
+                <th>Ocena</th>
+                <th>Akcije</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
 <style>
     .hover-card {
         transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
@@ -82,3 +134,64 @@
         }
 </style>
 
+<style>
+    .hover-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important;
+    }
+</style>
+
+<style>
+    body.dark-mode {
+        background-color: #111 !important;
+        color: #f5f5f5 !important;
+    }
+
+    body.dark-mode .card {
+        background-color: #222 !important;
+        color: #eee !important;
+    }
+
+    body.dark-mode table {
+        background-color: #222 !important;
+        color: #fff !important;
+    }
+
+    body.dark-mode input,
+    body.dark-mode select {
+        background-color: #333 !important;
+        color: #fff !important;
+        border: 1px solid #666 !important;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Dark mode toggle
+        document.getElementById("darkToggleBtn").addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+        });
+
+        // Sortiranje (client-side)
+        document.getElementById("sortSelect").addEventListener("change", function () {
+            alert("Tu bo sortiranje (demo) – lahko kasneje dodava pravo logiko.");
+        });
+
+        // Dodaj komentar
+        document.getElementById("addCommentBtn").addEventListener("click", function () {
+            let text = document.getElementById("commentInput").value;
+            if (text.trim() === "") return;
+
+            let li = document.createElement("li");
+            li.className = "list-group-item";
+            li.textContent = text;
+
+            document.getElementById("commentList").appendChild(li);
+            document.getElementById("commentInput").value = "";
+        });
+    </script>
+}
