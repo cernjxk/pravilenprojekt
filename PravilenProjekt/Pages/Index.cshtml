@@ -54,16 +54,16 @@
                                 <span class="h4 mb-0 text-primary">
                                     €@game.Price.ToString("F2")
                                 </span>
-                                </div>
-                                    <div class="d-flex gap-2">
-                                        <a asp-page="./Edit" asp-route-id="@game.Id" class="btn btn-sm btn-warning flex-fill">
-                                            ✏️ Uredi
-                                        </a>
-                                        <a asp-page="./Delete" asp-route-id="@game.Id" class="btn btn-sm btn-danger flex-fill">
-                                            🗑️ Izbriši
-                                        </a>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="d-flex gap-2 mt-2">
+                                <a asp-page="./Edit" asp-route-id="@game.Id" class="btn btn-sm btn-warning flex-fill">
+                                    ✏️ Uredi
+                                </a>
+                                <a asp-page="./Delete" asp-route-id="@game.Id" class="btn btn-sm btn-danger flex-fill">
+                                    🗑️ Izbriši
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,6 +101,14 @@
                 <button type="submit" class="btn btn-primary w-100">Dodaj igro</button>
             </div>
         </div>
+
+        <!-- NOVO: URL do uradne strani / trgovine -->
+        <div class="row g-2 mt-2">
+            <div class="col-md-6">
+                <label class="form-label">Povezava (URL na uradno stran / trgovino)</label>
+                <input type="url" id="gameWebsite" class="form-control" placeholder="https://store.steampowered.com/..." />
+            </div>
+        </div>
     </form>
 
     <!-- Razvrščanje -->
@@ -120,6 +128,7 @@
                 <th>Naslov</th>
                 <th>Žanr</th>
                 <th>Ocena</th>
+                <th>Povezava</th>  @* NOVO *@
                 <th>Akcije</th>
             </tr>
         </thead>
@@ -163,6 +172,28 @@
     }
 </style>
 
+<!-- NOVO: modal za podrobni pogled igre -->
+<div class="modal fade" id="gameDetailsModal" tabindex="-1" aria-labelledby="gameDetailsLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="gameDetailsLabel">Podrobnosti igre</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zapri"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Naslov:</strong> <span id="detailsTitle"></span></p>
+                <p><strong>Žanr:</strong> <span id="detailsGenre"></span></p>
+                <p><strong>Ocena:</strong> <span id="detailsRating"></span></p>
+                <p>
+                    <strong>Povezava:</strong>
+                    <a id="detailsWebsite" href="#" target="_blank">Odpri stran</a>
+                    <span id="detailsWebsiteNone" class="text-muted" style="display:none;">Ni dodane povezave.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -172,6 +203,7 @@
             const gameTitleInput = document.getElementById("gameTitle");
             const gameGenreInput = document.getElementById("gameGenre");
             const gameRatingInput = document.getElementById("gameRating");
+            const gameWebsiteInput = document.getElementById("gameWebsite"); // NOVO
             const sortSelect = document.getElementById("sortSelect");
             const gamesTableBody = document.querySelector("#gamesTable tbody");
 
@@ -212,6 +244,36 @@
                 localStorage.setItem("personalGames", JSON.stringify(games));
             }
 
+            // NOVO: funkcija za odprtje podrobnosti
+            function openDetails(game) {
+                document.getElementById("detailsTitle").textContent = game.title;
+                document.getElementById("detailsGenre").textContent = game.genre || "/";
+                document.getElementById("detailsRating").textContent = game.rating != null ? game.rating : "/";
+
+                const linkEl = document.getElementById("detailsWebsite");
+                const noneEl = document.getElementById("detailsWebsiteNone");
+
+                if (game.website) {
+                    linkEl.href = game.website;
+                    linkEl.style.display = "inline";
+                    noneEl.style.display = "none";
+                } else {
+                    linkEl.href = "#";
+                    linkEl.style.display = "none";
+                    noneEl.style.display = "inline";
+                }
+
+                if (window.bootstrap) {
+                    const modalEl = document.getElementById("gameDetailsModal");
+                    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    modal.show();
+                } else {
+                    alert(
+                        `Naslov: ${game.title}\nŽanr: ${game.genre}\nOcena: ${game.rating ?? ""}\nPovezava: ${game.website ?? ""}`
+                    );
+                }
+            }
+
             function renderGames() {
                 gamesTableBody.innerHTML = "";
 
@@ -239,7 +301,30 @@
                     tdRating.textContent = game.rating != null ? game.rating : "";
                     tr.appendChild(tdRating);
 
+                    // NOVO: stolpec Povezava
+                    const tdWebsite = document.createElement("td");
+                    if (game.website) {
+                        const a = document.createElement("a");
+                        a.href = game.website;
+                        a.target = "_blank";
+                        a.textContent = "Odpri";
+                        tdWebsite.appendChild(a);
+                    } else {
+                        tdWebsite.innerHTML = '<span class="text-muted">Ni povezave</span>';
+                    }
+                    tr.appendChild(tdWebsite);
+
                     const tdActions = document.createElement("td");
+
+                    // NOVO: gumb Podrobnosti
+                    const detailsBtn = document.createElement("button");
+                    detailsBtn.className = "btn btn-sm btn-outline-secondary me-2";
+                    detailsBtn.textContent = "Podrobnosti";
+                    detailsBtn.addEventListener("click", function () {
+                        openDetails(game);
+                    });
+                    tdActions.appendChild(detailsBtn);
+
                     const deleteBtn = document.createElement("button");
                     deleteBtn.className = "btn btn-sm btn-danger";
                     deleteBtn.textContent = "Izbriši";
@@ -249,6 +334,7 @@
                         renderGames();
                     });
                     tdActions.appendChild(deleteBtn);
+
                     tr.appendChild(tdActions);
 
                     gamesTableBody.appendChild(tr);
@@ -264,12 +350,14 @@
                 const genre = gameGenreInput.value.trim();
                 const ratingStr = gameRatingInput.value;
                 const rating = ratingStr ? parseInt(ratingStr, 10) : null;
+                const website = gameWebsiteInput.value.trim(); // NOVO
 
                 const newGame = {
                     id: Date.now(),
                     title: title,
                     genre: genre,
-                    rating: rating
+                    rating: rating,
+                    website: website
                 };
 
                 games.push(newGame);
@@ -279,6 +367,7 @@
                 gameTitleInput.value = "";
                 gameGenreInput.value = "";
                 gameRatingInput.value = "";
+                gameWebsiteInput.value = "";
             });
 
             sortSelect.addEventListener("change", function () {
