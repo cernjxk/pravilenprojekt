@@ -5,29 +5,21 @@ using PravilenProjekt.Services;
 
 namespace PravilenProjekt.Pages
 {
-    public class EditModel : PageModel
+    public class CreateModel : PageModel
     {
         private readonly GameService _gameService;
 
         [BindProperty]
         public Game Game { get; set; } = new();
 
-        public EditModel(GameService gameService)
+        public CreateModel(GameService gameService)
         {
             _gameService = gameService;
         }
 
-        public IActionResult OnGet(int id)
+        public void OnGet()
         {
-            var game = _gameService.GetGameById(id);
-
-            if (game == null)
-            {
-                return NotFound();
-            }
-
-            Game = game;
-            return Page();
+            // Prazna stran za vnos
         }
 
         public IActionResult OnPost()
@@ -37,8 +29,8 @@ namespace PravilenProjekt.Pages
                 return Page();
             }
 
-            _gameService.UpdateGame(Game);
-            TempData["SuccessMessage"] = $"Igra '{Game.Title}' je bila uspešno posodobljena!";
+            _gameService.AddGame(Game);
+            TempData["SuccessMessage"] = $"Igra '{Game.Title}' je bila uspešno dodana!";
 
             return RedirectToPage("./Index");
         }

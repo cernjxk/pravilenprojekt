@@ -37,7 +37,7 @@ namespace PravilenProjekt.Pages
             if (game != null)
             {
                 _gameService.DeleteGame(id);
-                TempData["SuccessMessage"] = $"Igra '{game.Title}' je bila uspešno izbrisana!";
+                TempData["SuccessMessage"] = $"Igra '{game.Title}' je bila uspesno izbrisana!";
             }
 
             return RedirectToPage("./Index");
