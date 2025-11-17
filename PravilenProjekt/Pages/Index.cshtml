@@ -18,10 +18,11 @@
             <h1 class="display-4 mb-2"> Katalog Videoiger</h1>
             <p class="lead text-muted">Pregled vseh razpoložljivih iger</p>
         </div>
+        <a asp-page="./Create" class="btn btn-primary btn-lg">
+            ➕ Dodaj novo igro
+        </a>
     </div>
-    <a asp-page="./Create" class="btn btn-success btn-lg">
-        ➕ Dodaj novo igro
-    </a>
+    
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach (var game in Model.Games)
@@ -54,11 +55,7 @@
                                 <span class="h4 mb-0 text-primary">
                                     €@game.Price.ToString("F2")
                                 </span>
-                                <div class="mt-auto">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span class="h4 mb-0 text-primary">
-                                            €@game.Price.ToString("F2")
-                                        </span>
+                                
                                     </div>
                                     <div class="d-flex gap-2">
                                         <a asp-page="./Edit" asp-route-id="@game.Id" class="btn btn-sm btn-warning flex-fill">
@@ -72,8 +69,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
         }
     </div>
 </div>
