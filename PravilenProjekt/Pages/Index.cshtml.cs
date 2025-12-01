@@ -10,6 +10,9 @@ namespace PravilenProjekt.Pages
         private readonly GameService _gameService;
         public List<Game> Games { get; set; } = new();
 
+        [BindProperty(SupportsGet = true)]
+        public string? SearchQuery { get; set; }
+
         public IndexModel(GameService gameService)
         {
             _gameService = gameService;
@@ -17,8 +20,18 @@ namespace PravilenProjekt.Pages
 
         public void OnGet()
         {
-            Games = _gameService.GetAllGames();
+            var allGames = _gameService.GetAllGames();
+
+            if (!string.IsNullOrWhiteSpace(SearchQuery))
+            {
+                Games = allGames
+                    .Where(g => g.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            else
+            {
+                Games = allGames;
+            }
         }
     }
 }
-
