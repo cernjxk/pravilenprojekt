@@ -22,6 +22,49 @@
             ➕ Dodaj novo igro
         </a>
     </div>
+    <!-- Search Bar -->
+        <form method="get" class="mb-3">
+            <div class="input-group input-group-lg">
+                <span class="input-group-text">
+                    🔍
+                </span>
+                <input type="text" 
+                       name="SearchQuery" 
+                       value="@Model.SearchQuery" 
+                       class="form-control" 
+                       placeholder="Išči igre po naslovu..." 
+                       aria-label="Search games">
+                <button type="submit" class="btn btn-primary">
+                    Išči
+                </button>
+            @if (!string.IsNullOrWhiteSpace(Model.SearchQuery))
+            {
+                <a asp-page="./Index" class="btn btn-outline-secondary">
+                    ❌ Počisti
+                </a>
+            }
+        </div>
+    </form>
+
+    <!-- Search Results Info -->
+    @if (!string.IsNullOrWhiteSpace(Model.SearchQuery))
+    {
+        <div class="alert alert-info" role="alert">
+            <strong>🔍 Rezultati iskanja za:</strong> "@Model.SearchQuery"
+            <span class="badge bg-primary">@Model.Games.Count najdenih</span>
+        </div>
+    }
+
+    @if (!Model.Games.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            <h4>😕 Ni rezultatov</h4>
+            <p>Ni najdenih iger za iskalni niz "@Model.SearchQuery".</p>
+            <a asp-page="./Index" class="btn btn-primary">Prikaži vse igre</a>
+        </div>
+    }
+</div>
+</div>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach (var game in Model.Games)
