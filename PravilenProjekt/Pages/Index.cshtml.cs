@@ -25,7 +25,9 @@ namespace PravilenProjekt.Pages
             if (!string.IsNullOrWhiteSpace(SearchQuery))
             {
                 Games = allGames
-                    .Where(g => g.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))
+                    .Where(g => g.Title.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                    g.Genre.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                    g.Platform.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
             else
