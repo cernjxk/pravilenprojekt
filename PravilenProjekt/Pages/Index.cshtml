@@ -20,12 +20,14 @@
                     <h1 class="display-4 mb-2">🎮 Katalog Videoiger</h1>
                     <p class="lead text-muted">Pregled vseh razpoložljivih iger</p>
                 </div>
-                <a asp-page="./Create" class="btn btn-success btn-lg">
-                    ➕ Dodaj novo igro
-                </a>
-                  <a asp-page="./Index" asp-page-handler="Export" class="btn btn-outline-primary btn-lg">
-                    📊 Izvozi v CSV
-                </a>
+                <div class="d-flex gap-2">
+                    <a asp-page="./Create" class="btn btn-success btn-lg">
+                        ➕ Dodaj novo igro
+                    </a>
+                    <a asp-page="./Index" asp-page-handler="Export" class="btn btn-outline-primary btn-lg">
+                        📊 Izvozi v CSV
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -134,18 +136,18 @@
                     <span class="badge bg-warning text-dark me-1">⭐ Najbolje ocenjene (9.0+)</span>
                 }
             </div>
-            <span class="badge bg-dark">@Model.Games.Count rezultatov</span>
-        </div>
-        <div class="mb-3">
-            <a asp-page="./Index" 
-                asp-page-handler="ExportFiltered"
-                asp-route-searchQuery="@Model.SearchQuery"
-                asp-route-genreFilter="@Model.GenreFilter"
-                asp-route-platformFilter="@Model.PlatformFilter"
-                asp-route-showTopRated="@Model.ShowTopRated"
-                class="btn btn-outline-success">
-                📥 Izvozi filtrirane igre (@Model.Games.Count iger)
-            </a>
+            <div class="d-flex gap-2 align-items-center">
+                <span class="badge bg-dark">@Model.Games.Count rezultatov</span>
+                <a asp-page="./Index" 
+                   asp-page-handler="ExportFiltered"
+                   asp-route-searchQuery="@Model.SearchQuery"
+                   asp-route-genreFilter="@Model.GenreFilter"
+                   asp-route-platformFilter="@Model.PlatformFilter"
+                   asp-route-showTopRated="@Model.ShowTopRated"
+                   class="btn btn-sm btn-outline-success">
+                    📥 Izvozi filtrirane
+                </a>
+            </div>
         </div>
     }
 
@@ -514,6 +516,5 @@
             loadGames();
             renderGames();
         });
-        
     </script>
 }

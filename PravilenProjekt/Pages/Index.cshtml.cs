@@ -82,7 +82,7 @@ namespace PravilenProjekt.Pages
             return _gameService.GetAllGames().Count(g => g.Rating >= 9.0);
         }
 
-        //Export to CSV
+        // Export vseh iger v CSV
         public IActionResult OnGetExport()
         {
             var allGames = _gameService.GetAllGames();
@@ -100,6 +100,50 @@ namespace PravilenProjekt.Pages
             
             var bytes = Encoding.UTF8.GetBytes(csv.ToString());
             var fileName = $"videoigre_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+            
+            return File(bytes, "text/csv", fileName);
+        }
+
+        // Export samo filtriranih iger v CSV
+        public IActionResult OnGetExportFiltered(string? searchQuery, string? genreFilter, string? platformFilter, bool showTopRated = false)
+        {
+            var allGames = _gameService.GetAllGames();
+            var filteredGames = allGames.AsEnumerable();
+
+            // Apply same filters as OnGet
+            if (showTopRated)
+            {
+                filteredGames = filteredGames.Where(g => g.Rating >= 9.0);
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                filteredGames = filteredGames.Where(g => 
+                    g.Title.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrWhiteSpace(genreFilter))
+            {
+                filteredGames = filteredGames.Where(g => g.Genre == genreFilter);
+            }
+
+            if (!string.IsNullOrWhiteSpace(platformFilter))
+            {
+                filteredGames = filteredGames.Where(g => g.Platform == platformFilter);
+            }
+
+            var games = filteredGames.ToList();
+            
+            var csv = new StringBuilder();
+            csv.AppendLine("ID,Naslov,Žanr,Platforma,Cena,Leto izdaje,Ocena,URL slike");
+            
+            foreach (var game in games)
+            {
+                csv.AppendLine($"{game.Id},\"{EscapeCsv(game.Title)}\",\"{EscapeCsv(game.Genre)}\",\"{EscapeCsv(game.Platform)}\",{game.Price},{game.ReleaseYear},{game.Rating},\"{EscapeCsv(game.ImageUrl)}\"");
+            }
+            
+            var bytes = Encoding.UTF8.GetBytes(csv.ToString());
+            var fileName = $"videoigre_filtered_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
             
             return File(bytes, "text/csv", fileName);
         }
