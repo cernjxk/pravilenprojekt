@@ -23,6 +23,9 @@
                 <a asp-page="./Create" class="btn btn-success btn-lg">
                     ➕ Dodaj novo igro
                 </a>
+                  <a asp-page="./Index" asp-page-handler="Export" class="btn btn-outline-primary btn-lg">
+                    📊 Izvozi v CSV
+                </a>
             </div>
         </div>
     </div>
@@ -132,6 +135,17 @@
                 }
             </div>
             <span class="badge bg-dark">@Model.Games.Count rezultatov</span>
+        </div>
+        <div class="mb-3">
+            <a asp-page="./Index" 
+                asp-page-handler="ExportFiltered"
+                asp-route-searchQuery="@Model.SearchQuery"
+                asp-route-genreFilter="@Model.GenreFilter"
+                asp-route-platformFilter="@Model.PlatformFilter"
+                asp-route-showTopRated="@Model.ShowTopRated"
+                class="btn btn-outline-success">
+                📥 Izvozi filtrirane igre (@Model.Games.Count iger)
+            </a>
         </div>
     }
 
@@ -500,5 +514,6 @@
             loadGames();
             renderGames();
         });
+        
     </script>
 }
