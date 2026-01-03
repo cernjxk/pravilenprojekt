@@ -21,6 +21,9 @@ namespace PravilenProjekt.Pages
         [BindProperty(SupportsGet = true)]
         public string? PlatformFilter { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public bool ShowTopRated { get; set; }
+
         public IndexModel(GameService gameService)
         {
             _gameService = gameService;
@@ -36,6 +39,12 @@ namespace PravilenProjekt.Pages
 
             // Filtriraj igre
             var filteredGames = allGames.AsEnumerable();
+
+            // Top Rated filter - Ocena 9.0 ali več
+            if (ShowTopRated)
+            {
+                filteredGames = filteredGames.Where(g => g.Rating >= 9.0);
+            }
 
             // Search po naslovu
             if (!string.IsNullOrWhiteSpace(SearchQuery))
@@ -56,14 +65,20 @@ namespace PravilenProjekt.Pages
                 filteredGames = filteredGames.Where(g => g.Platform == PlatformFilter);
             }
 
-            Games = filteredGames.ToList();
+            Games = filteredGames.OrderByDescending(g => g.Rating).ToList();
         }
 
         public bool HasActiveFilters()
         {
             return !string.IsNullOrWhiteSpace(SearchQuery) || 
                    !string.IsNullOrWhiteSpace(GenreFilter) || 
-                   !string.IsNullOrWhiteSpace(PlatformFilter);
+                   !string.IsNullOrWhiteSpace(PlatformFilter) ||
+                   ShowTopRated;
+        }
+
+        public int GetTopRatedCount()
+        {
+            return _gameService.GetAllGames().Count(g => g.Rating >= 9.0);
         }
     }
 }
