@@ -70,6 +70,25 @@
                         </select>
                     </div>
 
+                    <!-- Top Rated Toggle -->
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" 
+                                   type="checkbox" 
+                                   name="ShowTopRated" 
+                                   value="true" 
+                                   id="topRatedToggle"
+                                   checked="@Model.ShowTopRated">
+                            <label class="form-check-label fw-bold" for="topRatedToggle">
+                                ⭐ Prikaži samo najbolje ocenjene (9.0+)
+                                @if (Model.GetTopRatedCount() > 0)
+                                {
+                                    <span class="badge bg-warning text-dark">@Model.GetTopRatedCount() iger</span>
+                                }
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- Buttons -->
                     <div class="col-12">
                         <div class="d-flex gap-2">
@@ -107,6 +126,10 @@
                 {
                     <span class="badge bg-info me-1">Platforma: @Model.PlatformFilter</span>
                 }
+                @if (Model.ShowTopRated)
+                {
+                    <span class="badge bg-warning text-dark me-1">⭐ Najbolje ocenjene (9.0+)</span>
+                }
             </div>
             <span class="badge bg-dark">@Model.Games.Count rezultatov</span>
         </div>
@@ -127,7 +150,15 @@
         @foreach (var game in Model.Games)
         {
             <div class="col">
-                <div class="card h-100 shadow-sm hover-card">
+                <div class="card h-100 shadow-sm hover-card @(game.Rating >= 9.0 ? "border-warning border-3" : "")">
+                    @if (game.Rating >= 9.0)
+                    {
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-warning text-dark fs-6">
+                                🏆 TOP RATED
+                            </span>
+                        </div>
+                    }
                     <img src="@game.ImageUrl" class="card-img-top" alt="@game.Title" style="height: 300px; object-fit: cover;">
 
                     <div class="card-body d-flex flex-column">
