@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PravilenProjekt.Models;
 using PravilenProjekt.Services;
+using System.Text;
 
 namespace PravilenProjekt.Pages
 {
@@ -79,6 +80,37 @@ namespace PravilenProjekt.Pages
         public int GetTopRatedCount()
         {
             return _gameService.GetAllGames().Count(g => g.Rating >= 9.0);
+        }
+
+        //Export to CSV
+        public IActionResult OnGetExport()
+        {
+            var allGames = _gameService.GetAllGames();
+            
+            var csv = new StringBuilder();
+            
+            // Header
+            csv.AppendLine("ID,Naslov,Žanr,Platforma,Cena,Leto izdaje,Ocena,URL slike");
+            
+            // Rows
+            foreach (var game in allGames)
+            {
+                csv.AppendLine($"{game.Id},\"{EscapeCsv(game.Title)}\",\"{EscapeCsv(game.Genre)}\",\"{EscapeCsv(game.Platform)}\",{game.Price},{game.ReleaseYear},{game.Rating},\"{EscapeCsv(game.ImageUrl)}\"");
+            }
+            
+            var bytes = Encoding.UTF8.GetBytes(csv.ToString());
+            var fileName = $"videoigre_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+            
+            return File(bytes, "text/csv", fileName);
+        }
+
+        private string EscapeCsv(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+            
+            // Escape double quotes
+            return value.Replace("\"", "\"\"");
         }
     }
 }
