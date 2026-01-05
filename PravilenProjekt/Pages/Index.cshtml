@@ -301,6 +301,47 @@
         </select>
     </div>
 
+
+    <!-- ✅ STATISTIKA (GameList-19) -->
+    <div class="row g-3 mb-3" id="statsPanel">
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted">Št. dodanih iger</div>
+                    <div class="h3 mb-0" id="statTotalGames">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted">Povprečna ocena</div>
+                    <div class="h3 mb-0" id="statAvgRating">/</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted">Najpogostejši žanr</div>
+                    <div class="h5 mb-0" id="statTopGenre">/</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="text-muted">Najboljša ocena</div>
+                    <div class="h3 mb-0" id="statBestRating">/</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Tabela iger -->
     <table id="gamesTable" class="table table-striped">
         <thead>
@@ -458,6 +499,53 @@
                             );
                         }
                     }
+                            // ========= ✅ STATISTIKA (GameList-19) =========
+        function updateStats() {
+            const totalEl = document.getElementById("statTotalGames");
+            const avgEl = document.getElementById("statAvgRating");
+            const topGenreEl = document.getElementById("statTopGenre");
+            const bestEl = document.getElementById("statBestRating");
+
+            if (!totalEl || !avgEl || !topGenreEl || !bestEl) return;
+
+            const total = games.length;
+            totalEl.textContent = total.toString();
+
+            // Povprečna ocena (upošteva samo igre z rating)
+            const rated = games.filter(g => g.rating != null && !isNaN(g.rating));
+            if (rated.length === 0) {
+                avgEl.textContent = "/";
+                bestEl.textContent = "/";
+            } else {
+                const sum = rated.reduce((acc, g) => acc + Number(g.rating), 0);
+                const avg = sum / rated.length;
+                avgEl.textContent = avg.toFixed(1);
+
+                const best = Math.max(...rated.map(g => Number(g.rating)));
+                bestEl.textContent = best.toString();
+            }
+
+            // Najpogostejši žanr
+            const counts = {};
+            games.forEach(g => {
+                const genre = (g.genre || "").trim();
+                if (!genre) return;
+                const key = genre.toLowerCase();
+                counts[key] = (counts[key] || 0) + 1;
+            });
+
+            const entries = Object.entries(counts);
+            if (entries.length === 0) {
+                topGenreEl.textContent = "/";
+            } else {
+                entries.sort((a, b) => b[1] - a[1]); // desc po frekvenci
+                const topKey = entries[0][0];
+
+                // lepši prikaz (prva črka velika)
+                topGenreEl.textContent = topKey.charAt(0).toUpperCase() + topKey.slice(1);
+            }
+        }
+
 
             function renderGames() {
                 if (!gamesTableBody || !sortSelect) return;
@@ -542,6 +630,8 @@
 
                     gamesTableBody.appendChild(tr);
                 });
+                updateStats();
+
             }
 
             if (gameForm) {
