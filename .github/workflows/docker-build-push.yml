@@ -30,7 +30,7 @@ jobs:
       - name: Test
         run: dotnet test --no-build -c Release --logger "trx;LogFileName=test_results.trx"
 
-              - name: Test Report
+      - name: Test Report
         if: always()
         uses: dorny/test-reporter@v1
         with:
