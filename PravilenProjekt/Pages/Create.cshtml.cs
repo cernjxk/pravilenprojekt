@@ -5,6 +5,7 @@ using PravilenProjekt.Services;
 
 namespace PravilenProjekt.Pages
 {
+    
     public class CreateModel : PageModel
     {
         private readonly GameService _gameService;
@@ -30,7 +31,7 @@ namespace PravilenProjekt.Pages
             }
 
             _gameService.AddGame(Game);
-            TempData["SuccessMessage"] = $"Igra '{Game.Title}' je bila uspešno dodana!";
+            TempData["SuccessMessage"] = $"Igra '{Game.Title}' je bila uspesno dodana!";
 
             return RedirectToPage("./Index");
         }

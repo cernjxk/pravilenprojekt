@@ -38,7 +38,7 @@ namespace PravilenProjekt.Pages
             }
 
             _gameService.UpdateGame(Game);
-            TempData["SuccessMessage"] = $"Igra '{Game.Title}' je bila uspešno posodobljena!";
+            TempData["SuccessMessage"] = $"Igra '{Game.Title}' je bila uspesno posodobljena!";
 
             return RedirectToPage("./Index");
         }
